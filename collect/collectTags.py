@@ -17,7 +17,7 @@ def collect_tags():
             unique_tags[lower_tag] += 1
 
     unique_tag_df = pd.DataFrame(unique_tags.items(), columns=['name','count'])
-    unique_tag_df = unique_tag_df.sort_values(by=['count','name'], ascending=[False, True])
+    unique_tag_df = unique_tag_df.sort_values(by=['name'], ascending=[True])
 
     print(unique_tag_df)
 
