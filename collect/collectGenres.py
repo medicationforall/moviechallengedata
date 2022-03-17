@@ -20,6 +20,6 @@ def collect_genres():
     genre_df = pd.DataFrame(unique_genres.items(), columns=['name','count'])
     genre_df = genre_df.sort_values(by=['name'])
 
-    print(genre_df)
+    #print(genre_df)
 
     return genre_df
