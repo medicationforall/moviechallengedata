@@ -6,6 +6,7 @@ def __process_movie_files():
     print('__process_movie_files')
 
     movies_df = collect_movies()
+    movies_df.to_json('out/movies.json', orient="index")
 
     genres_df = collect_genres()
     genres_df.to_json('out/genres.json', orient="records")

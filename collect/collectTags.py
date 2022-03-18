@@ -4,7 +4,6 @@ import pandas as pd
 def collect_tags():
     tags_path = Path('input/tags.csv')
     tags_df = pd.read_csv(tags_path)
-    print(tags_df)
 
     unique_tags = {}
 
@@ -18,7 +17,5 @@ def collect_tags():
 
     unique_tag_df = pd.DataFrame(unique_tags.items(), columns=['name','count'])
     unique_tag_df = unique_tag_df.sort_values(by=['name'], ascending=[True])
-
-    print(unique_tag_df)
 
     return unique_tag_df
