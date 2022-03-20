@@ -11,13 +11,17 @@ def collect_movies():
     movies_links_df = movies_df.merge(links_df, on='movieId')
 
     movie_tags_df = __build_tags_per_movie()
+    movie_rating_df = __build_rating_per_movie()
+
     movies_links_tags_df = movies_links_df.merge(movie_tags_df, on='movieId', how='left')
     movies_links_tags_df.rename(columns={"tag": "tags"}, inplace=True)
-    movies_links_tags_df = movies_links_tags_df.set_index(['title'])
 
-    #print(movies_links_tags_df)
+    movies_links_tags_rating_df = movies_links_tags_df.merge(movie_rating_df, on='movieId', how='left')
+    movies_links_tags_rating_df = movies_links_tags_rating_df.set_index(['title'])
 
-    return movies_links_tags_df
+    print(movies_links_tags_rating_df)
+
+    return movies_links_tags_rating_df
 
 def __load_and_clean_movies():
         movies_path = Path('input/movies.csv')
@@ -68,7 +72,22 @@ def __build_tags_per_movie():
     tags_df['tag'] = tags_df['tag'].str.lower()
 
     # https://stackoverflow.com/questions/22219004/how-to-group-dataframe-rows-into-list-in-pandas-groupby
-    movie_tags_seies = tags_df.groupby('movieId')['tag'].apply(list)
-    movie_tags_df = movie_tags_seies.to_frame()
+    movie_tags_series = tags_df.groupby('movieId')['tag'].apply(list)
+    movie_tags_df = movie_tags_series.to_frame()
 
     return movie_tags_df
+
+def __build_rating_per_movie():
+    ratings_path = Path('input/ratings.csv')
+    ratings_df = pd.read_csv(ratings_path)
+    ratings_df.drop(columns=['userId','timestamp'], inplace=True)
+
+    movie_ratings_group_by = ratings_df.groupby('movieId')
+    movie_ratings_mean_series = movie_ratings_group_by['rating'].mean()
+    movie_ratings_count_series = movie_ratings_group_by['rating'].count()
+
+    movie_ratings_df = movie_ratings_mean_series.to_frame()
+    movie_ratings_df['ratingCount'] = movie_ratings_count_series
+
+    print(movie_ratings_df)
+    return movie_ratings_df
