@@ -12,7 +12,7 @@ def collect_movies():
     movies_links_df = movies_links_df.set_index(['title'])
 
     movie_tags_df = __build_tags_per_movie()
-    movies_links_tags_df = movies_links_df.merge(movie_tags_df, on='movieId')
+    movies_links_tags_df = movies_links_df.merge(movie_tags_df, on='movieId', how='left')
     movies_links_tags_df.rename(columns={"tag": "tags"}, inplace=True)
 
     print(movies_links_tags_df)
