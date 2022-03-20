@@ -65,6 +65,7 @@ def __build_tags_per_movie():
     tags_path = Path('input/tags.csv')
     tags_df = pd.read_csv(tags_path)
     tags_df.drop(columns=['userId','timestamp'], inplace=True)
+    tags_df['tag'] = tags_df['tag'].str.lower()
 
     # https://stackoverflow.com/questions/22219004/how-to-group-dataframe-rows-into-list-in-pandas-groupby
     movie_tags_seies = tags_df.groupby('movieId')['tag'].apply(list)
